@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
@@ -17,11 +18,25 @@ public class Main {
 
         System.out.println(list);
 
-        Collections.sort(list, new PersonComparator(2));
+        Comparator<Person> personComparator1 = (Person o1, Person o2) -> {
+
+            int maxWords = 3;
+
+            List<String> surname1 = new ArrayList<>();
+            surname1.addAll(List.of(o1.getSurname().split("\\P{IsAlphabetic}+")));
+            List<String> surname2 = new ArrayList<>();
+            surname2.addAll(List.of(o2.getSurname().split("\\P{IsAlphabetic}+")));
+
+            if ((surname1.size() < maxWords || surname2.size() < maxWords) && (surname1.size() != surname2.size())) {
+                return Integer.compare(surname1.size(), surname2.size());
+            } else {
+                return Integer.compare(o1.getAge(), o2.getAge());
+            }
+        };
+
+        Collections.sort(list, personComparator1);
         System.out.println(list);
 
-        Collections.sort(list, new PersonComparator(3));
-        System.out.println(list);
 
     }
 
